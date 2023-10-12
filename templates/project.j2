@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    openshift.io/description: "{{ ocp_proj_description | default(omit) }}"
+    openshift.io/display-name: "{{ ocp_proj_displayname | default(omit) }}"
+    openshift.io/node-selector: "{{ ocp_proj_nodeselector | default(omit) }}"
+  name: {{ ocp_proj_name }}

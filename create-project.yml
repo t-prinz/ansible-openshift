@@ -1,0 +1,37 @@
+---
+- name: Create and configure an OpenShift Project
+  hosts: localhost
+  gather_facts: false
+  vars:
+    ocp_validate_certs: "false"
+    ocp_proj_name: "test"
+    ocp_proj_description: ""
+    ocp_proj_displayname: ""
+    ocp_proj_nodeselector: "nodechoice=acc"
+    ocp_pipeline_ns: "jenkins-cicd"
+    ocp_pipeline_sa: "jenkins-sa"
+
+  tasks:
+    - name: Ensure Project is created with appropriate annotation
+      redhat.openshift.k8s:
+        api_key: "{{ ocp_api_key }}"
+        host: "{{ ocp_host }}"
+        state: present
+        template: "./templates/project.j2"
+        validate_certs: "{{ ocp_validate_certs }}"
+        wait: true
+      register: proj_output
+
+    - name: Print Project creation results
+      ansible.builtin.debug:
+        var: proj_output
+        verbosity: 1
+
+    - name: Ensure pipeline service account is granted proper permission
+      redhat.openshift.k8s:
+        api_key: "{{ ocp_api_key }}"
+        host: "{{ ocp_host }}"
+        state: present
+        template: "./templates/rbac.j2"
+        validate_certs: "{{ ocp_validate_certs }}"
+        wait: true

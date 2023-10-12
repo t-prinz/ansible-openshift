@@ -1,0 +1,6 @@
+ungrouped:
+  hosts:
+    localhost:
+      ansible_connection: local
+      ocp_host: "https://api.yourcluster.com:6443"
+      ocp_api_key: "key-from oc whoami -t"
