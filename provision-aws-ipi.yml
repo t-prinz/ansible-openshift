@@ -1,0 +1,20 @@
+---
+# Work in progress - testing with SNOW
+- name: Playbooks to provision a new cluster in AWS using the IPI method
+  hosts: "{{ hostlist | default('all') }}"
+  vars:
+    ocp_baseDomain: ""
+    ocp_worker_replicas: ""
+    ocp_clustername: ""
+    ocp_aws_region: ""
+    ocp_pullSecret: ""
+    ocp_sshKey: ""
+
+  tasks:
+    - name: Print received variables
+      ansible.builtin.debug:
+        msg: "Creating cluster {{ ocp_clustername }}.{{ ocp_baseDomain }}"
+
+#    - name: Ensure the base directory holding the cluster information is created
+#    - name: Ensure the directory for the install-config.yaml file is created
+#    - name: Ensure the install-config.yaml file is created
