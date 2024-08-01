@@ -1,0 +1,34 @@
+additionalTrustBundlePolicy: Proxyonly
+apiVersion: v1
+baseDomain: {{ ocp_baseDomain }}
+compute:
+- architecture: amd64
+  hyperthreading: Enabled
+  name: worker
+  platform: {}
+  replicas: {{ ocp_computenode_replicas }}
+controlPlane:
+  architecture: amd64
+  hyperthreading: Enabled
+  name: master
+  platform: {}
+  replicas: {{ ocp_controlPlane_replicas }}
+metadata:
+  creationTimestamp: null
+  name: {{ ocp_clustername }}
+networking:
+  clusterNetwork:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+  machineNetwork:
+  - cidr: 10.0.0.0/16
+  networkType: OVNKubernetes
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+  aws:
+    region: {{ ocp_aws_region }}
+publish: External
+pullSecret: {{ ocp_pullSecret }}
+sshKey: |
+  {{ ocp_sshKey }}
