@@ -44,14 +44,9 @@
           ansible.builtin.debug:
             msg: "Creating cluster {{ ocp_clustername }}.{{ ocp_baseDomain }}"
 
-        - name: Ensure the directory for the install-config.yaml file is created
-          ansible.builtin.file:
-            path: "{{ ocp_clusterinfo_dir }}"
-            state: "directory"
-
         - name: Ensure the base directory holding the cluster provisioning information is created
           ansible.builtin.file:
-            path: "{{ ocp_clusterinfo_dir }}/config"
+            path: "{{ ocp_clusterinfo_dir }}"
             state: "directory"
 
         - name: Ensure the install-config.yaml file is created
@@ -78,11 +73,11 @@
 
         - name: Command to run
           ansible.builtin.debug:
-            msg: "./openshift-install create cluster --dir {{ ocp_clusterinfo_dir }}/config --log-level=info"
+            msg: "./openshift-install create cluster --log-level=info"
 
 #        - name: Create the cluster
 #          ansible.builtin.command:
 #            chdir: "{{ ocp_clusterinfo_dir }}"
-#            cmd: "./openshift-install create cluster --dir {{ ocp_clusterinfo_dir }}/config --log-level=info"
+#            cmd: "./openshift-install create cluster --log-level=info"
 
       delegate_to: "{{ ocp_bastion_node }}"
