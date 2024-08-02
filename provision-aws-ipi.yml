@@ -1,5 +1,9 @@
 ---
 # Work in progress - testing with SNOW
+#
+# For reference, create the install-config file by running
+#
+#   ./openshift-install create install-config --dir <installation_directory>
 
 - name: Playbooks to provision a new cluster in AWS using the IPI method
   hosts: "{{ hostlist | default('all') }}"
