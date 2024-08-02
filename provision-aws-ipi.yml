@@ -69,15 +69,15 @@
         - name: Print AWS key info
           ansible.builtin.debug:
             var: aws_key_output
-#            verbosity: 1
+            verbosity: 1
 
         - name: Command to run
           ansible.builtin.debug:
             msg: "./openshift-install create cluster --log-level=info"
 
-#        - name: Create the cluster
-#          ansible.builtin.command:
-#            chdir: "{{ ocp_clusterinfo_dir }}"
-#            cmd: "./openshift-install create cluster --log-level=info"
+        - name: Create the cluster
+          ansible.builtin.command:
+            chdir: "{{ ocp_clusterinfo_dir }}"
+            cmd: "./openshift-install create cluster --log-level=info"
 
       delegate_to: "{{ ocp_bastion_node }}"
