@@ -29,6 +29,6 @@ platform:
   aws:
     region: {{ ocp_aws_region }}
 publish: External
-pullSecret: '{{ ocp_pullSecret }}'
+pullSecret: {{ ocp_pullSecret }}
 sshKey: |
   {{ ocp_sshKey }}
