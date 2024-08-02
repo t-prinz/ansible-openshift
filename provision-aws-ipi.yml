@@ -74,6 +74,7 @@
         - name: Print AWS key info
           ansible.builtin.debug:
             var: aws_key_output
+            verbosity: 1
 
         - name: Command to run
           ansible.builtin.debug:
