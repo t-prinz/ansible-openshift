@@ -84,9 +84,9 @@
           ansible.builtin.debug:
             msg: "./openshift-install create cluster --dir {{ ocp_clusterinfo_dir }}/config --log-level=info"
 
-        - name: Create the cluster
-          ansible.builtin.command:
-            chdir: "{{ ocp_clusterinfo_dir }}"
-            cmd: "./openshift-install create cluster --dir {{ ocp_clusterinfo_dir }}/config --log-level=info"
+#        - name: Create the cluster
+#          ansible.builtin.command:
+#            chdir: "{{ ocp_clusterinfo_dir }}"
+#            cmd: "./openshift-install create cluster --dir {{ ocp_clusterinfo_dir }}/config --log-level=info"
 
       delegate_to: "{{ ocp_bastion_node }}"
