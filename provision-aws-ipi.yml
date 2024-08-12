@@ -48,6 +48,10 @@
           ansible.builtin.debug:
             msg: "Creating cluster {{ ocp_clustername }}.{{ ocp_baseDomain }}"
 
+        - name: Print inventory hostname
+          ansible.builtin.debug:
+            msg: "Inventory hostname {{ inventory_hostname }}"
+
         - name: Ensure the base directory holding the cluster provisioning information is created
           ansible.builtin.file:
             path: "{{ ocp_clusterinfo_dir }}"
