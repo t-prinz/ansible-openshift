@@ -1,0 +1,88 @@
+---
+#
+# For reference, destroy the cluster by running the following
+#
+#   ./openshift-install destroy cluster --dir <installation_directory>
+
+- name: Playbooks to decommission a cluster in AWS
+  hosts: "{{ hostlist | default('all') }}"
+  gather_facts: false
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ aws_ocp_access_key_id }}"
+    AWS_SECRET_ACCESS_KEY: "{{ aws_ocp_secret_access_key }}"
+  vars:
+    ocp_installer: "~/bin/openshift-install"
+
+  tasks:
+    - name: Check that mandatory variables are defined
+      ansible.builtin.assert:
+        fail_msg: |+
+          The following variables must be defined (examples provided):
+            ocp_bastion_node: "bastion.example.com"
+            ocp_clusterinfo_dir: "./"
+            aws_ocp_access_key_id: "your AWS_ACCESS_KEY_ID"
+            aws_ocp_secret_access_key: "your AWS_SECRET_ACCESS_KEY"
+        that:
+          - ocp_bastion_node is defined
+          - ocp_clusterinfo_dir is defined
+          - aws_ocp_access_key_id: "your AWS_ACCESS_KEY_ID"
+          - aws_ocp_secret_access_key: "your AWS_SECRET_ACCESS_KEY"
+
+    - name: Block to decommission the cluster from the bastion node
+      block:
+
+        - name: Check the status of the OpenShift installer
+          ansible.builtin.stat:
+            path: "{{ ocp_installer }}"
+          register: installer_stat
+
+        - name: Print installer_stat
+          debug:
+            var: installer_stat
+            verbosity: 1
+
+        - name: Verify the OpenShift installer is present
+          ansible.builtin.assert:
+            fail_msg: "The OpenShift installer must be available at {{ ocp_installer }}"
+            that:
+              - installer_stat.stat.exists
+
+        - name: Print cluster information
+          ansible.builtin.debug:
+            msg: "Decommissioning cluster {{ ocp_clustername }}.{{ ocp_baseDomain }}"
+
+        - name: Print inventory hostname
+          ansible.builtin.debug:
+            msg: "Inventory hostname {{ inventory_hostname }}"
+
+#        - name: Ensure the base directory holding the cluster provisioning information is created
+#          ansible.builtin.file:
+#            path: "{{ ocp_clusterinfo_dir }}"
+#            state: "directory"
+
+#        - name: Ensure the config directory is created
+#          ansible.builtin.file:
+#            path: "{{ ocp_clusterinfo_dir }}/config"
+#            state: "directory"
+
+        - name: Ensure the AWS key is reflected
+          ansible.builtin.command:
+            chdir: "{{ ocp_clusterinfo_dir }}"
+            cmd: "echo ${AWS_ACCESS_KEY_ID} ${AWS_SECRET_ACCESS_KEY}"
+          register: aws_key_output
+
+        - name: Print AWS key info
+          ansible.builtin.debug:
+            var: aws_key_output
+            verbosity: 1
+
+        - name: Command to run
+          ansible.builtin.debug:
+            msg: "{{ ocp_installer }} destroy cluster --dir {{ ocp_clusterinfo_dir }}/config --log-level=info"
+
+#        - name: Destroy the cluster
+#          ansible.builtin.command:
+#            chdir: "{{ ocp_clusterinfo_dir }}"
+#            cmd: "{{ ocp_installer }} destroy cluster --dir {{ ocp_clusterinfo_dir }}/config --log-level=info"
+
+      delegate_to: "{{ ocp_bastion_node }}"
