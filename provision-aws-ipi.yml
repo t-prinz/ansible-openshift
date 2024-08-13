@@ -1,5 +1,4 @@
 ---
-# Work in progress - testing with SNOW
 #
 # For reference, create the install-config file by running
 #
@@ -67,11 +66,11 @@
             dest: "{{ ocp_clusterinfo_dir }}/config/install-config.yaml"
             src: "install-config.yaml.j2"
 
-#        - name: Ensure the installer file is present
-#          ansible.builtin.unarchive:
-#            dest: "{{ ocp_clusterinfo_dir }}"
-#            mode: '0755'
-#            src: files/openshift-install-linux.tar.gz
+        - name: Ensure the installer file is present
+          ansible.builtin.unarchive:
+            dest: "{{ ocp_clusterinfo_dir }}"
+            mode: '0755'
+            src: files/openshift-install-linux.tar.gz
 
         - name: Ensure the AWS key is reflected
           ansible.builtin.command:
@@ -88,9 +87,9 @@
           ansible.builtin.debug:
             msg: "./openshift-install create cluster --dir {{ ocp_clusterinfo_dir }}/config --log-level=info"
 
-#        - name: Create the cluster
-#          ansible.builtin.command:
-#            chdir: "{{ ocp_clusterinfo_dir }}"
-#            cmd: "./openshift-install create cluster --dir {{ ocp_clusterinfo_dir }}/config --log-level=info"
+        - name: Create the cluster
+          ansible.builtin.command:
+            chdir: "{{ ocp_clusterinfo_dir }}"
+            cmd: "./openshift-install create cluster --dir {{ ocp_clusterinfo_dir }}/config --log-level=info"
 
       delegate_to: "{{ ocp_bastion_node }}"
