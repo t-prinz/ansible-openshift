@@ -54,7 +54,7 @@
           ansible.builtin.assert:
             fail_msg: "The OpenShift installer must be available at {{ ocp_installer }}"
             that:
-              - installer_stat.exists
+              - installer_stat.stat.exists
 
         - name: Print cluster information
           ansible.builtin.debug:
