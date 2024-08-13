@@ -51,10 +51,6 @@
           ansible.builtin.debug:
             msg: "Decommissioning cluster {{ inventory_hostname }}"
 
-        - name: Print inventory hostname
-          ansible.builtin.debug:
-            msg: "Inventory hostname {{ inventory_hostname }}"
-
 #        - name: Ensure the base directory holding the cluster provisioning information is created
 #          ansible.builtin.file:
 #            path: "{{ ocp_clusterinfo_dir }}"
@@ -80,9 +76,9 @@
           ansible.builtin.debug:
             msg: "{{ ocp_installer }} destroy cluster --dir {{ ocp_clusterinfo_dir }}/config --log-level=info"
 
-#        - name: Destroy the cluster
-#          ansible.builtin.command:
-#            chdir: "{{ ocp_clusterinfo_dir }}"
-#            cmd: "{{ ocp_installer }} destroy cluster --dir {{ ocp_clusterinfo_dir }}/config --log-level=info"
+        - name: Destroy the cluster
+          ansible.builtin.command:
+            chdir: "{{ ocp_clusterinfo_dir }}"
+            cmd: "{{ ocp_installer }} destroy cluster --dir {{ ocp_clusterinfo_dir }}/config --log-level=info"
 
       delegate_to: "{{ ocp_bastion_node }}"
