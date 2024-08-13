@@ -50,9 +50,10 @@
             path: "{{ ocp_installer }}"
           register: installer_stat
 
-        - name: Print stat
+        - name: Print installer_stat
           debug:
             var: installer_stat
+            verbosity: 1
 
         - name: Verify the OpenShift installer is present
           ansible.builtin.assert:
