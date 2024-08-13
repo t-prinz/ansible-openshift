@@ -10,6 +10,8 @@
   environment:
     AWS_ACCESS_KEY_ID: "{{ aws_ocp_access_key_id }}"
     AWS_SECRET_ACCESS_KEY: "{{ aws_ocp_secret_access_key }}"
+  vars:
+    ocp_installer: "~/bin/openshift-install"
 
   tasks:
     - name: Check that mandatory variables are defined
@@ -43,6 +45,17 @@
     - name: Block to provision the cluster from the bastion node
       block:
 
+        - name: Check the status of the OpenShift installer
+          ansible.builtin.stat:
+            path: "{{ ocp_installer }}"
+          register: installer_stat
+
+        - name: Verify the OpenShift installer is present
+          ansible.builtin.assert:
+            fail_msg: "The OpenShift installer must be available at {{ ocp_installer }}"
+            that:
+              - installer_stat.exists
+
         - name: Print cluster information
           ansible.builtin.debug:
             msg: "Creating cluster {{ ocp_clustername }}.{{ ocp_baseDomain }}"
@@ -66,12 +79,6 @@
             dest: "{{ ocp_clusterinfo_dir }}/config/install-config.yaml"
             src: "install-config.yaml.j2"
 
-#        - name: Ensure the installer file is present
-#          ansible.builtin.unarchive:
-#            dest: "{{ ocp_clusterinfo_dir }}"
-#            mode: '0755'
-#            src: files/openshift-install-linux.tar.gz
-
         - name: Ensure the AWS key is reflected
           ansible.builtin.command:
             chdir: "{{ ocp_clusterinfo_dir }}"
@@ -85,11 +92,11 @@
 
         - name: Command to run
           ansible.builtin.debug:
-            msg: "./openshift-install create cluster --dir {{ ocp_clusterinfo_dir }}/config --log-level=info"
+            msg: "{{ ocp_installer }} create cluster --dir {{ ocp_clusterinfo_dir }}/config --log-level=info"
 
         - name: Create the cluster
           ansible.builtin.command:
             chdir: "{{ ocp_clusterinfo_dir }}"
-            cmd: "./openshift-install create cluster --dir {{ ocp_clusterinfo_dir }}/config --log-level=info"
+            cmd: "{{ ocp_installer }} create cluster --dir {{ ocp_clusterinfo_dir }}/config --log-level=info"
 
       delegate_to: "{{ ocp_bastion_node }}"
