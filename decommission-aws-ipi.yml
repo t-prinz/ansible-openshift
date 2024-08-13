@@ -49,7 +49,7 @@
 
         - name: Print cluster information
           ansible.builtin.debug:
-            msg: "Decommissioning cluster {{ ocp_clustername }}.{{ ocp_baseDomain }}"
+            msg: "Decommissioning cluster {{ inventory_hostname }}"
 
         - name: Print inventory hostname
           ansible.builtin.debug:
