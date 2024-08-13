@@ -66,11 +66,11 @@
             dest: "{{ ocp_clusterinfo_dir }}/config/install-config.yaml"
             src: "install-config.yaml.j2"
 
-        - name: Ensure the installer file is present
-          ansible.builtin.unarchive:
-            dest: "{{ ocp_clusterinfo_dir }}"
-            mode: '0755'
-            src: files/openshift-install-linux.tar.gz
+#        - name: Ensure the installer file is present
+#          ansible.builtin.unarchive:
+#            dest: "{{ ocp_clusterinfo_dir }}"
+#            mode: '0755'
+#            src: files/openshift-install-linux.tar.gz
 
         - name: Ensure the AWS key is reflected
           ansible.builtin.command:
