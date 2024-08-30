@@ -13,3 +13,7 @@ Run the playbook using
 ## To test passing variables using curl
 
     curl -s -k --user 'admin:your-password' -H "Content-Type: application/json" -X POST https://aapcont.example.com:8443/api/v2/job_templates/54/launch/ --data '{"extra_vars": {"ocp_clustername": "ocpsandbox", "ocp_baseDomain": "example.com"}}' | jq
+
+## Reference to install OCP on AWS with bare metal nodes
+
+https://www.redhat.com/en/blog/openshift-virtualization-on-amazon-web-services
