@@ -104,4 +104,17 @@
             chdir: "{{ ocp_clusterinfo_dir }}"
             cmd: "{{ ocp_installer }} create cluster --dir {{ ocp_clusterinfo_dir }}/config --log-level=info"
 
+        - name: Get the kubeadmin password
+          ansible.builtin.slurp:
+            src: "{{ ocp_clusterinfo_dir }}/config/auth/kubeadmin-password"
+          register: kubeadmin_pw
+
+        - name: Print connection information
+          ansible.builtin.debug:
+            msg:
+              - "Web console:  https://console-openshift-console.apps.{{ ocp_clustername }}.{{ ocp_baseDomain }}"
+              - "Username   :  kubeadmin"
+              - "Password   :  {{ kubeadmin_pw.content | b64decode }}"
+              - "API        :  https://api.{{ ocp_clustername }}.{{ ocp_baseDomain }}m:6443"
+
       delegate_to: "{{ ocp_bastion_node }}"
