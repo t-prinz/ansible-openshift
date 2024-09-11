@@ -5,7 +5,7 @@ compute:
 - architecture: amd64
   hyperthreading: Enabled
   name: worker
-{% if ocp_use_bare_metal_workers %}
+{% if ocp_use_bare_metal_compute_nodes %}
   platform:
     aws:
       type: m5.metal
@@ -17,7 +17,13 @@ controlPlane:
   architecture: amd64
   hyperthreading: Enabled
   name: master
+{% if ocp_use_bare_metal_controlplane_nodes %}
+  platform:
+    aws:
+      type: m5.metal
+{% else %}
   platform: {}
+{% endif %}
   replicas: {{ ocp_controlPlane_replicas }}
 metadata:
   creationTimestamp: null
