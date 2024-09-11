@@ -115,6 +115,6 @@
               - "Web console:  https://console-openshift-console.apps.{{ ocp_clustername }}.{{ ocp_baseDomain }}"
               - "Username   :  kubeadmin"
               - "Password   :  {{ kubeadmin_pw.content | b64decode }}"
-              - "API        :  https://api.{{ ocp_clustername }}.{{ ocp_baseDomain }}m:6443"
+              - "API        :  https://api.{{ ocp_clustername }}.{{ ocp_baseDomain }}:6443"
 
       delegate_to: "{{ ocp_bastion_node }}"
