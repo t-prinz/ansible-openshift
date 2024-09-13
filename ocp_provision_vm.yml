@@ -5,29 +5,30 @@
     vm_name: myrhel9
     vm_namespace: sandbox
     os_version: rhel9
+    ocp_validate_certs: false
 
   tasks:
 
-    - name: Include connection variables
-      ansible.builtin.include_vars:
-        file: ../vars/ocp_connection.yml
+#    - name: Include connection variables
+#      ansible.builtin.include_vars:
+#        file: ../vars/ocp_connection.yml
 
-    - name: Check that the connection information is defined
-      ansible.builtin.assert:
-        fail_msg: |+
-          The following variables must be defined (examples provided):
-            ocp_host: "https://api.mycluster.example.com:6443"
-            ocp_admin_api_key: "api_key: sha256~somethinglonghere"
-        that:
-          - ocp_host is defined
-          - ocp_admin_api_key is defined
+#    - name: Check that the connection information is defined
+#      ansible.builtin.assert:
+#        fail_msg: |+
+#          The following variables must be defined (examples provided):
+#            ocp_host: "https://api.mycluster.example.com:6443"
+#            ocp_admin_api_key: "api_key: sha256~somethinglonghere"
+#        that:
+#          - ocp_host is defined
+#          - ocp_admin_api_key is defined
 
-    - name: Print connection info
-      ansible.builtin.debug:
-        msg:
-          - "ocp_host         : {{ ocp_host }}"
-          - "ocp_admin_api_key: {{ ocp_admin_api_key }}"
-#        verbosity: 1
+#    - name: Print connection info
+#      ansible.builtin.debug:
+#        msg:
+#          - "ocp_host         : {{ ocp_host }}"
+#          - "ocp_admin_api_key: {{ ocp_admin_api_key }}"
+##        verbosity: 1
 
     - name: Print info
       ansible.builtin.debug:
@@ -35,8 +36,8 @@
 
     - name: Create vm
       redhat.openshift.k8s:
-        api_key: "{{ ocp_admin_api_key }}"
-        host: "{{ ocp_host }}"
+#        api_key: "{{ ocp_admin_api_key }}"
+#        host: "{{ ocp_host }}"
         state: present
         template: "./templates/virtualmachine.j2"
         validate_certs: "{{ ocp_validate_certs }}"
@@ -49,8 +50,8 @@
 
     - name: Get an existing VirtualMachine
       redhat.openshift_virtualization.kubevirt_vm_info:
-        api_key: "{{ ocp_admin_api_key }}"
-        host: "{{ ocp_host }}"
+#        api_key: "{{ ocp_admin_api_key }}"
+#        host: "{{ ocp_host }}"
         name: "{{ vm_name }}"
         namespace: "{{ vm_namespace }}"
         validate_certs: "{{ ocp_validate_certs }}"
